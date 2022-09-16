@@ -1,0 +1,47 @@
+"use strict";
+const stringify = require("qs-stringify");
+const crypto = require("crypto");
+const fetch = require("node-fetch");
+
+const API_URL = "https://api.3commas.io";
+
+class threeCommasAPI {
+  constructor(opts = {}) {
+    this._url = opts.url || API_URL;
+    this._apiKey = opts.apiKey || "";
+    this._apiSecret = opts.apiSecret || "";
+    this._forcedMode = opts.forcedMode || "real";
+  }
+
+  generateSignature(requestUri, reqData) {
+    const request = requestUri + reqData;
+    return crypto.createHmac("sha256", this._apiSecret).update(request).digest("hex");
+  }
+
+  async makeRequest(method, path, params) {
+    if (!this._apiKey || !this._apiSecret) {return new Error("missing api key or secret");}
+
+    let fullParams = stringify(params).replace(/\[\d+\]/g,'[]');
+    const sig = this.generateSignature(path, fullParams);
+
+    try {
+      let url = `${this._url}${path}${stringify(params)}`;
+      url = url.replace(/\[\d+\]/g,'[]');
+
+      let response = await fetch(url, {
+        method: method,
+        timeout: 30000,
+        agent: "",
+        headers: {
+          APIKEY: this._apiKey,
+          Signature: sig,
+          "Forced-Mode": this._forcedMode,
+        },
+      });
+
+      return await response.json();
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }

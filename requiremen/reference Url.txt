@@ -1,0 +1,15 @@
+https://www.esparkinfo.com/blog/node-js-with-mysql-using-sequelize-express.html
+
+https://github.com/3commas-io/3commas-official-api-docs/blob/master/bots_api.md#create-bot-permission-bots_write-security-signed
+
+https://github.com/3commas-io/3commas-official-api-docs/blob/master/bots_api.md
+
+https://github.com/rentorm/3commas-api-node
+
+-------signature------------
+https://www.devglan.com/online-tools/hmac-sha256-online
+
+https://github.com/sgerodes/3commas-postman/blob/main/pre-request-script.js   //Here is the signature generation in js:
+
+
+
